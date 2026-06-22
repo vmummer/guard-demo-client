@@ -243,7 +243,7 @@ All API routes are under the `/api` prefix.
 - `PUT /api/tools/{id}` - Update tool
 - `DELETE /api/tools/{id}` - Delete tool
 - `POST /api/tools/test/{id}` - Test tool
-- `GET /api/tools/{id}/capabilities - Request Capabilities of an MCP Tool
+- `GET /api/tools/{id}/capabilities` - Request Capabilities of an MCP Tool
 
 ### Lakera
 - `GET /api/lakera/last` - Get last guardrail result
