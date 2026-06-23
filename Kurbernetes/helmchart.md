@@ -1,3 +1,8 @@
+
+<img width="952" height="533" alt="image" src="https://github.com/user-attachments/assets/61a08f8f-bf34-4076-bc54-050b63c0fc6f" />
+
+
+
 # Deploying the Check Point AI Guardrails Demo in Kubernetes Cluster via a Helm Chart
 
 These instructions should work for a standard Kubernetes Cluster. x86 (amd64) & arm64 based deployments
