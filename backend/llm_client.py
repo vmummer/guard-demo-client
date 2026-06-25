@@ -15,11 +15,15 @@ from .models import AppConfig
 LITELLM_MODELS_TIMEOUT = 10.0
 
 STATIC_MODELS = [
-    "gpt-4o",
+    "gpt-5",
+    "gpt-5-mini",
+    "gpt-5-nano","gpt-4o",
     "gpt-4o-mini",
     "gpt-4",
     "gpt-4-turbo",
     "gpt-3.5-turbo",
+    "llama3",
+    "qwen2.5",
     "anthropic-claude",
     "ollama-llama",
     "ollama-mistral",
@@ -350,6 +354,8 @@ def get_models(config: Optional[AppConfig] = None) -> List[str]:
     """
     Get available models. When using LiteLLM, returns key-specific models from proxy.
     Falls back to static list when not using LiteLLM, or when LiteLLM fetch fails/returns empty.
+
+    Uses also STATIC_MODELS as a Whitelist filter to avoid of older or non-functional models. 
     """
     cfg = config or _get_config()
     if not cfg:
@@ -365,7 +371,12 @@ def get_models(config: Optional[AppConfig] = None) -> List[str]:
     if not use_litellm:
         models = _get_models_openai(api_key)
         if models:
-            filtered_models = [model for model in models if _is_standard_model(model)]
+        # filtered_models = [model for model in models if _is_standard_model(model)]
+        # Filter for standard models AND ensure they are in the STATIC_MODELS whitelist
+            filtered_models = [ 
+                model for model in models 
+                if _is_standard_model(model) and model in STATIC_MODELS
+                ]
             return filtered_models or STATIC_MODELS
         return STATIC_MODELS
 
@@ -373,7 +384,8 @@ def get_models(config: Optional[AppConfig] = None) -> List[str]:
     litellm_base_url = getattr(cfg, "litellm_base_url", None) or "http://localhost:4000"
     models = _get_models_litellm(api_key=api_key or "", base_url=litellm_base_url)
     if models:
-        filtered_models = [model for model in models if _is_standard_model(model)]
+        filtered_models = [model for model in models 
+            if _is_standard_model(model) and model in STATIC_MODELS]
         return filtered_models or STATIC_MODELS
 
     return STATIC_MODELS
@@ -429,7 +441,10 @@ def get_embedding_models(config: Optional[AppConfig] = None) -> List[str]:
         try:
             client = openai.OpenAI(api_key=api_key)
             models = client.models.list()
-            embedding_models = [m.id for m in models.data if _filter_embedding_model(m.id)]
+
+            # Filter for embedding models AND ensure they are in the EMBEDDING_DEFAULTS whitelist
+            embedding_models = [m.id for m in models.data 
+                if _filter_embedding_model(m.id) and m.id in EMBEDDING_DEFAULTS]
             result = embedding_models if embedding_models else EMBEDDING_DEFAULTS.copy()
 #          if "nomic-embed-text" not in result:
 #                result.append("nomic-embed-text")
@@ -447,7 +462,9 @@ def get_embedding_models(config: Optional[AppConfig] = None) -> List[str]:
             resp.raise_for_status()
             data = resp.json()
             models = data.get("data", [])
-            embedding_models = [m.get("id") for m in models if isinstance(m, dict) and _filter_embedding_model(m.get("id"))]
+            embedding_models = [m.get("id") for m in models 
+                if isinstance(m, dict) and _filter_embedding_model(m.get("id") in EMBEDDING_DEFAULTS  )]
+                                                                   
             result = embedding_models if embedding_models else EMBEDDING_DEFAULTS.copy()
 #            if "nomic-embed-text" not in result:
 #                result.append("nomic-embed-text")
