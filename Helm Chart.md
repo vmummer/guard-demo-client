@@ -1,3 +1,8 @@
+
+<img width="610" height="345" alt="image" src="https://github.com/user-attachments/assets/a9e765e8-5114-4a3a-8922-e3b7af213d6b" />
+
+
+
 # Deploying the Check Point AI Guardrails Demo in Kubernetes Cluster via a Helm Chart
 
 These instructions should work for a standard Kubernetes Cluster. x86 (amd64) & arm64 based deployments
@@ -23,7 +28,7 @@ Options:
   --set guarddemo.volumePaths.upload="/home/checkpoint/guard-data/uploads" \
   --set guarddemo.replicas=1 \
   --set ingress.host="172.20.27.76.nip.io" \
-  --set env.OPENAI_BASE_URL="http://your-ollama-url"
+  --set env.OPENAI_BASE_URL="http://your-ollama-url"      <<< Optional - Remove to default to OpenAI API
 ```
 
 
