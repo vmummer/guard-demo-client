@@ -1,8 +1,5 @@
 
- 
-<img width="598" height="334" alt="image" src="https://github.com/user-attachments/assets/c55db74b-9d67-442d-a054-50b3b8c4cf17" />
-
-
+<img width="599" height="331" alt="image" src="https://github.com/user-attachments/assets/192e685e-ec1a-42e2-a349-811e91116f04" />
 
 # Deploying the Check Point AI Guardrails Demo in Kubernetes Cluster via a Helm Chart
 
